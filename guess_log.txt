@@ -1,0 +1,4 @@
+Wordle Solver Session
+Guess: IRATE, Feedback: BBGBY
+Guess: LEACH, Feedback: GGGBB
+Guess: LEAFY, Feedback: GGGGG
