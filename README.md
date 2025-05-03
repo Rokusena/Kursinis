@@ -1,5 +1,3 @@
-# Kursinis
-
 # 📘 Kursinio darbo ataskaita – Wordle Solver (OOP projektas)
 
 ## 1. Įžanga
@@ -29,20 +27,82 @@ python src/main.py
 
 ## 2. Pagrindinė analizė
 
-### a. Kaip įgyvendinti funkcionalūs reikalavimai?
+### ✅ 2.1 OOP principai su kodo pavyzdžiais:
 
-* **OOP principai:**
+**Encapsulation (duomenų paslėpimas):**
 
-  * **Encapsulation:** Klasės `WordleSolver`, `WordList`, `Feedback` turi privatų duomenų saugojimą
-  * **Abstraction:** Bazinė klasė `SolverStrategy` apibrėžia bendrą sąsają
-  * **Inheritance:** `FrequencySolverStrategy` paveldi iš `SolverStrategy`
-  * **Polymorphism:** `top_guesses()` veikia skirtingai priklausomai nuo pasirinktos strategijos
+```python
+class WordleSolver:
+    def __init__(self, wordlist):
+        self.full_wordlist = wordlist.get_words()
+        self.possible_words = self.full_wordlist.copy()
+```
 
-* **Dizaino šablonas:** Naudojamas `Strategy Pattern` spėjimo logikai keisti
+> Žodžių sąrašas laikomas viduje, nepasiekiamas tiesiogiai iš išorės.
 
-* **Testavimas:** Visi pagrindiniai funkcionalumai patikrinti su `unittest`
+**Abstraction (abstrakti klasė):**
 
-* **Failų valdymas:** Žodžiai įkeliami iš `data/words.txt`, sesijos saugomos į `guess_log.txt`
+```python
+class SolverStrategy:
+    def top_guesses(self, possible_words, n):
+        raise NotImplementedError()
+```
+
+> Strategijos bendras šablonas, kurį įgyvendina skirtingos strategijos (polimorfizmas).
+
+**Inheritance (paveldėjimas):**
+
+```python
+class FrequencySolverStrategy(SolverStrategy):
+    def top_guesses(self, possible_words, n=10):
+        ...
+```
+
+> Ši klasė paveldi `SolverStrategy` ir perrašo `top_guesses()` metodą.
+
+**Polymorphism (elgsena priklauso nuo paveldėtos klasės):**
+
+```python
+context = StrategyContext(FrequencySolverStrategy())
+context.top_guesses(words, 10)
+```
+
+> Kontekstas naudoja tą patį metodą `top_guesses()`, nors strategijos gali skirtis.
+
+### 🎯 2.2 Strategijos šablonas (Strategy Pattern)
+
+```python
+class StrategyContext:
+    def __init__(self, strategy: SolverStrategy):
+        self.strategy = strategy
+
+    def top_guesses(self, possible_words, n=10):
+        return self.strategy.top_guesses(possible_words, n)
+```
+
+> Leidžia greitai keisti algoritmą (pvz. galima sukurti `RandomSolverStrategy`).
+
+### 📂 2.3 Failų valdymas
+
+```python
+wordlist = WordList("data/words.txt")
+with open("guess_log.txt", "a") as log_file:
+    log_file.write(f"Guess: {guess}, Feedback: {feedback}
+")
+```
+
+> Programoje įkeliami visi galimi žodžiai iš failo, o naudotojo spėjimai saugomi tekstiniame faile.
+
+### 🧪 2.4 Testavimas su `unittest`
+
+```python
+def test_invalid_symbols_or_numbers(self):
+    invalid_words = ["a1ert", "al!rt", "12345"]
+    for word in invalid_words:
+        self.assertFalse(word.isalpha() and len(word) == 5)
+```
+
+> Testas patikrina, ar įvestas žodis yra teisingas (5 raidės, be simbolių/skaičių).
 
 ---
 
@@ -69,10 +129,9 @@ python src/main.py
 
 ---
 
-## 4. Naudoti šaltiniai ir įrankiai 
+## 4. Naudoti šaltiniai ir įrankiai (pasirinktinai)
 
 * Python 3.13
 * `unittest`, `collections`, `random`
 * Wordle oficialus žodynas (panaudota dalis žodžių)
 * Git + GitHub versijavimo kontrolei
-* ChatGpt , Gemini pagalba
