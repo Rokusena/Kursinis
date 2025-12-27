@@ -1,0 +1,4 @@
+Wordle Solver Session
+Guess: IRATE, Feedback: BBBBB
+Guess: SOUND, Feedback: BGBYB
+Guess: BONGO, Feedback: BGGBB
